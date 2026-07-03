@@ -50,20 +50,20 @@ export function Admin() {
     
     // Auto-correção silenciosa de partidas do dia 03/07 no Firestore
     for (const m of data) {
-      if (m.id === 'm086' && m.kickoffLocal !== '2026-07-03T15:00:00-03:00') {
+      if (m.id === 'm086' && m.kickoffLocal !== '2026-07-03T19:00:00-03:00') {
         try {
-          await setDoc(doc(db, 'matches', 'm086'), { kickoffLocal: '2026-07-03T15:00:00-03:00' }, { merge: true });
-          m.kickoffLocal = '2026-07-03T15:00:00-03:00';
-          console.log('Partida m086 auto-corrigida para 15:00');
+          await setDoc(doc(db, 'matches', 'm086'), { kickoffLocal: '2026-07-03T19:00:00-03:00' }, { merge: true });
+          m.kickoffLocal = '2026-07-03T19:00:00-03:00';
+          console.log('Partida m086 auto-corrigida para 19:00');
         } catch (e) {
           console.error('Erro ao auto-corrigir m086:', e);
         }
       }
-      if (m.id === 'm088' && m.kickoffLocal !== '2026-07-03T19:00:00-03:00') {
+      if (m.id === 'm088' && m.kickoffLocal !== '2026-07-03T15:00:00-03:00') {
         try {
-          await setDoc(doc(db, 'matches', 'm088'), { kickoffLocal: '2026-07-03T19:00:00-03:00' }, { merge: true });
-          m.kickoffLocal = '2026-07-03T19:00:00-03:00';
-          console.log('Partida m088 auto-corrigida para 19:00');
+          await setDoc(doc(db, 'matches', 'm088'), { kickoffLocal: '2026-07-03T15:00:00-03:00' }, { merge: true });
+          m.kickoffLocal = '2026-07-03T15:00:00-03:00';
+          console.log('Partida m088 auto-corrigida para 15:00');
         } catch (e) {
           console.error('Erro ao auto-corrigir m088:', e);
         }
@@ -201,9 +201,9 @@ export function Admin() {
     m083: { stadium: 'BMO Field',                city: 'Toronto',          kickoffLocal: '2026-07-02T20:00:00-03:00', roundName: '16-avos de Final' },
     m084: { stadium: 'SoFi Stadium',             city: 'Los Angeles',      kickoffLocal: '2026-07-02T16:00:00-03:00', roundName: '16-avos de Final' },
     m085: { stadium: 'BC Place',                 city: 'Vancouver',        kickoffLocal: '2026-07-03T00:00:00-03:00', roundName: '16-avos de Final' },
-    m086: { stadium: 'Hard Rock Stadium',        city: 'Miami',            kickoffLocal: '2026-07-03T15:00:00-03:00', roundName: '16-avos de Final' },
+    m086: { stadium: 'Hard Rock Stadium',        city: 'Miami',            kickoffLocal: '2026-07-03T19:00:00-03:00', roundName: '16-avos de Final' },
     m087: { stadium: 'Arrowhead Stadium',        city: 'Kansas City',      kickoffLocal: '2026-07-03T22:30:00-03:00', roundName: '16-avos de Final' },
-    m088: { stadium: 'AT&T Stadium',             city: 'Dallas',           kickoffLocal: '2026-07-03T19:00:00-03:00', roundName: '16-avos de Final' },
+    m088: { stadium: 'AT&T Stadium',             city: 'Dallas',           kickoffLocal: '2026-07-03T15:00:00-03:00', roundName: '16-avos de Final' },
     // Oitavas de Final
     m089: { stadium: 'Lincoln Financial Field', city: 'Philadelphia',     kickoffLocal: '2026-07-04T18:00:00-03:00', roundName: 'Oitavas de Final' },
     m090: { stadium: 'NRG Stadium',             city: 'Houston',          kickoffLocal: '2026-07-04T14:00:00-03:00', roundName: 'Oitavas de Final' },
