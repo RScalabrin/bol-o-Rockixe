@@ -68,6 +68,33 @@ export function Admin() {
           console.error('Erro ao auto-corrigir m088:', e);
         }
       }
+      if (m.id === 'm093' && m.kickoffLocal !== '2026-07-06T16:00:00-03:00') {
+        try {
+          await setDoc(doc(db, 'matches', 'm093'), { kickoffLocal: '2026-07-06T16:00:00-03:00' }, { merge: true });
+          m.kickoffLocal = '2026-07-06T16:00:00-03:00';
+          console.log('Partida m093 auto-corrigida para 16:00');
+        } catch (e) {
+          console.error('Erro ao auto-corrigir m093:', e);
+        }
+      }
+      if (m.id === 'm094' && m.kickoffLocal !== '2026-07-06T21:00:00-03:00') {
+        try {
+          await setDoc(doc(db, 'matches', 'm094'), { kickoffLocal: '2026-07-06T21:00:00-03:00' }, { merge: true });
+          m.kickoffLocal = '2026-07-06T21:00:00-03:00';
+          console.log('Partida m094 auto-corrigida para 21:00');
+        } catch (e) {
+          console.error('Erro ao auto-corrigir m094:', e);
+        }
+      }
+      if (m.id === 'm100' && m.kickoffLocal !== '2026-07-11T22:00:00-03:00') {
+        try {
+          await setDoc(doc(db, 'matches', 'm100'), { kickoffLocal: '2026-07-11T22:00:00-03:00' }, { merge: true });
+          m.kickoffLocal = '2026-07-11T22:00:00-03:00';
+          console.log('Partida m100 auto-corrigida para 22:00');
+        } catch (e) {
+          console.error('Erro ao auto-corrigir m100:', e);
+        }
+      }
     }
     
     data.sort((a, b) => new Date(a.kickoffLocal) - new Date(b.kickoffLocal));
@@ -182,15 +209,15 @@ export function Admin() {
     m090: { stadium: 'NRG Stadium',             city: 'Houston',          kickoffLocal: '2026-07-04T14:00:00-03:00', roundName: 'Oitavas de Final' },
     m091: { stadium: 'MetLife Stadium',         city: 'Nova York/NJ',     kickoffLocal: '2026-07-05T17:00:00-03:00', roundName: 'Oitavas de Final' },
     m092: { stadium: 'Estadio Azteca',          city: 'Cidade do México', kickoffLocal: '2026-07-05T21:00:00-03:00', roundName: 'Oitavas de Final' },
-    m093: { stadium: 'AT&T Stadium',            city: 'Dallas',           kickoffLocal: '2026-07-06T15:00:00-03:00', roundName: 'Oitavas de Final' },
-    m094: { stadium: 'Lumen Field',             city: 'Seattle',          kickoffLocal: '2026-07-06T20:00:00-03:00', roundName: 'Oitavas de Final' },
+    m093: { stadium: 'AT&T Stadium',            city: 'Dallas',           kickoffLocal: '2026-07-06T16:00:00-03:00', roundName: 'Oitavas de Final' },
+    m094: { stadium: 'Lumen Field',             city: 'Seattle',          kickoffLocal: '2026-07-06T21:00:00-03:00', roundName: 'Oitavas de Final' },
     m095: { stadium: 'Mercedes-Benz Stadium',   city: 'Atlanta',          kickoffLocal: '2026-07-07T13:00:00-03:00', roundName: 'Oitavas de Final' },
     m096: { stadium: 'BC Place',               city: 'Vancouver',        kickoffLocal: '2026-07-07T17:00:00-03:00', roundName: 'Oitavas de Final' },
     // Quartas de Final
     m097: { stadium: 'Gillette Stadium',        city: 'Boston',           kickoffLocal: '2026-07-09T17:00:00-03:00', roundName: 'Quartas de Final' },
     m098: { stadium: 'SoFi Stadium',            city: 'Los Angeles',      kickoffLocal: '2026-07-10T16:00:00-03:00', roundName: 'Quartas de Final' },
     m099: { stadium: 'Hard Rock Stadium',       city: 'Miami',            kickoffLocal: '2026-07-11T18:00:00-03:00', roundName: 'Quartas de Final' },
-    m100: { stadium: 'Arrowhead Stadium',       city: 'Kansas City',      kickoffLocal: '2026-07-11T21:00:00-03:00', roundName: 'Quartas de Final' },
+    m100: { stadium: 'Arrowhead Stadium',       city: 'Kansas City',      kickoffLocal: '2026-07-11T22:00:00-03:00', roundName: 'Quartas de Final' },
     // Semifinais
     m101: { stadium: 'AT&T Stadium',            city: 'Dallas',           kickoffLocal: '2026-07-14T16:00:00-03:00', roundName: 'Semifinal' },
     m102: { stadium: 'Mercedes-Benz Stadium',   city: 'Atlanta',          kickoffLocal: '2026-07-15T16:00:00-03:00', roundName: 'Semifinal' },
