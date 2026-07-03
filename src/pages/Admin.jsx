@@ -517,11 +517,22 @@ export function Admin() {
             const predB = parseInt(pred.scoreB);
 
             const isKnockout = !match.groupId;
-            const ptsForExact = isKnockout ? 6 : 6;
-            const ptsForWin = isKnockout ? 3 : 3;
+            let matchPoints = 0;
+
+            // Check exact score
+            if (predA === offA && predB === offB) {
+              matchPoints += 6;
+              totalExact += 1;
+            } else {
+              // Check outcome (winner or draw)
+              const offOutcome = offA > offB ? 'A' : offA < offB ? 'B' : 'DRAW';
+              const predOutcome = predA > predB ? 'A' : predA < predB ? 'B' : 'DRAW';
+              if (offOutcome === predOutcome) {
+                matchPoints += 3;
+              }
+            }
 
             // Bônus de "quem passa" no mata-mata
-            // REGRA: só para quem apostou EMPATE (predA === predB) e acertou o vencedor nos pênaltis
             if (isKnockout) {
               // Quem realmente avançou (oficial)
               let offQualifier = null;
@@ -529,25 +540,28 @@ export function Admin() {
               else if (offB > offA) offQualifier = match.teamBId;
               else offQualifier = match.officialPenaltyWinnerId;
 
-              // Qualificador previsto: só contabilizado se o apostador apostou empate
-              const predIsDraw = (predA === predB);
-              const predQualifier = predIsDraw ? pred.penaltyWinnerId : null;
+              // Quem o apostador previu que avançaria
+              let predQualifier = null;
+              if (predA > predB) predQualifier = match.teamAId;
+              else if (predB > predA) predQualifier = match.teamBId;
+              else predQualifier = pred.penaltyWinnerId;
 
               if (offQualifier && predQualifier && predQualifier === offQualifier) {
-                totalPoints += 3;
+                const predIsDraw = (predA === predB);
+                if (predIsDraw) {
+                  // Se apostou empate e acertou quem passa nos pênaltis, ganha +3 pontos extras
+                  matchPoints += 3;
+                } else {
+                  // Se apostou vitória de um time, e esse time passou:
+                  // Ele ganha +3 pontos se e somente se ele NÃO ganhou pontos na primeira parte (matchPoints === 0)
+                  if (matchPoints === 0) {
+                    matchPoints += 3;
+                  }
+                }
               }
             }
 
-            if (predA === offA && predB === offB) {
-              totalPoints += ptsForExact;
-              totalExact += 1;
-            } else {
-              const offOutcome = offA > offB ? 'A' : offA < offB ? 'B' : 'DRAW';
-              const predOutcome = predA > predB ? 'A' : predA < predB ? 'B' : 'DRAW';
-              if (offOutcome === predOutcome) {
-                totalPoints += ptsForWin;
-              }
-            }
+            totalPoints += matchPoints;
 
           }
         }

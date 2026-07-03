@@ -42,8 +42,6 @@ const calculateMatchPoints = (match, pred) => {
   }
 
   // Bônus de "quem passa" no mata-mata
-  // REGRA: só se aplica quando o apostador previu EMPATE (predA === predB)
-  // e acertou o vencedor nos pênaltis. Quem apostou vitória não recebe este bônus.
   let isQualifierCorrect = false;
   if (isKnockout) {
     // Quem realmente avançou (oficial)
@@ -52,14 +50,26 @@ const calculateMatchPoints = (match, pred) => {
     else if (offB > offA) offQualifier = match.teamBId;
     else offQualifier = match.officialPenaltyWinnerId;
 
-    // Quem o apostador previu que avançaria nos pênaltis
-    // — só é válido se o apostador apostou EMPATE
-    const predIsDraw = (predA === predB);
-    const predQualifier = predIsDraw ? pred.penaltyWinnerId : null;
+    // Quem o apostador previu que avançaria
+    let predQualifier = null;
+    if (predA > predB) predQualifier = match.teamAId;
+    else if (predB > predA) predQualifier = match.teamBId;
+    else predQualifier = pred.penaltyWinnerId;
 
     if (offQualifier && predQualifier && predQualifier === offQualifier) {
-      points += 3;
       isQualifierCorrect = true;
+      const predIsDraw = (predA === predB);
+      if (predIsDraw) {
+        // Se apostou empate e acertou quem passa nos pênaltis, ganha +3 pontos extras
+        points += 3;
+      } else {
+        // Se apostou vitória de um time, e esse time passou:
+        // Ele ganha +3 pontos se e somente se ele NÃO ganhou pontos na primeira parte (ou seja, se points === 0)
+        // Isso cobre o caso em que ele apostou vitória, o jogo deu empate, mas o time dele passou nos pênaltis.
+        if (points === 0) {
+          points += 3;
+        }
+      }
     }
   }
 
@@ -69,22 +79,35 @@ const calculateMatchPoints = (match, pred) => {
   let text = "var(--text-secondary)";
   let border = "var(--border-color)";
 
-  if (isExact) {
-    desc = isQualifierCorrect ? `🔥 Placar Exato + Classificado (+9 pts)` : `🔥 Placar Exato (+6 pts)`;
+  if (points === 9) {
+    desc = `🔥 Placar Exato + Classificado (+9 pts)`;
     bg = "rgba(52, 211, 153, 0.1)";
     text = "var(--success)";
     border = "rgba(52, 211, 153, 0.25)";
-  } else if (isOutcomeCorrect) {
-    // isQualifierCorrect + isOutcomeCorrect só ocorre quando apostou empate + acertou pênaltis + placar foi empate (não exato)
-    desc = isQualifierCorrect ? `👍 Empate + Classificado (+6 pts)` : `👍 Acertou Vencedor (+3 pts)`;
-    bg = "rgba(212, 168, 67, 0.1)";
-    text = "var(--primary)";
-    border = "rgba(212, 168, 67, 0.25)";
-  } else if (isQualifierCorrect) {
-    desc = `⚽ Apenas Classificado (+3 pts)`;
-    bg = "rgba(251, 191, 36, 0.1)";
-    text = "var(--warning)";
-    border = "rgba(251, 191, 36, 0.25)";
+  } else if (points === 6) {
+    if (isExact) {
+      desc = `🔥 Placar Exato (+6 pts)`;
+      bg = "rgba(52, 211, 153, 0.1)";
+      text = "var(--success)";
+      border = "rgba(52, 211, 153, 0.25)";
+    } else {
+      desc = `👍 Empate + Classificado (+6 pts)`;
+      bg = "rgba(212, 168, 67, 0.1)";
+      text = "var(--primary)";
+      border = "rgba(212, 168, 67, 0.25)";
+    }
+  } else if (points === 3) {
+    if (isOutcomeCorrect) {
+      desc = `👍 Acertou Vencedor (+3 pts)`;
+      bg = "rgba(212, 168, 67, 0.1)";
+      text = "var(--primary)";
+      border = "rgba(212, 168, 67, 0.25)";
+    } else {
+      desc = `⚽ Apenas Classificado (+3 pts)`;
+      bg = "rgba(251, 191, 36, 0.1)";
+      text = "var(--warning)";
+      border = "rgba(251, 191, 36, 0.25)";
+    }
   } else {
     desc = `❌ Errou (0 pts)`;
     bg = "rgba(107, 107, 128, 0.1)";
