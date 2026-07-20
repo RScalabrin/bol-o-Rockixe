@@ -488,10 +488,13 @@ export function Admin() {
 
       // Descobre o campeão se a final já acabou
       let championId = null;
-      const finalMatch = finishedMatches.find(m => m.roundId === 'final');
+      const finalMatch = finishedMatches.find(m => m.roundId === 'round_final' || m.roundId === 'final');
       if (finalMatch) {
-        if (finalMatch.officialScoreA > finalMatch.officialScoreB) championId = finalMatch.teamAId;
-        else if (finalMatch.officialScoreB > finalMatch.officialScoreA) championId = finalMatch.teamBId;
+        const fA = parseInt(finalMatch.officialScoreA, 10);
+        const fB = parseInt(finalMatch.officialScoreB, 10);
+        if (fA > fB) championId = finalMatch.teamAId;
+        else if (fB > fA) championId = finalMatch.teamBId;
+        else if (finalMatch.officialPenaltyWinnerId) championId = finalMatch.officialPenaltyWinnerId;
       }
 
       const usersSnap = await getDocs(collection(db, 'users'));
